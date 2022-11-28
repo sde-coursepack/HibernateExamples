@@ -16,9 +16,9 @@ public class StateDemo {
         session.getTransaction().commit();
 
         // Get Example
-        State maryland = session.get(State.class, 1);
-        System.out.println(maryland);
-
+//        State maryland = session.get(State.class, 1);
+//        System.out.println(maryland);
+//
         // Get All States:
         String hql = "from State"; //class name, not Table name!
         Query<State> stateQuery = session.createQuery(hql);

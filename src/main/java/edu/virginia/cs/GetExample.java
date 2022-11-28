@@ -49,14 +49,14 @@ public class GetExample {
         return clientList;
     }
 
-    private static Account getPrimaryCheckingAccountForClient(Client bob) {
+    private static Account getPrimaryCheckingAccountForClient(Client client) {
         CriteriaBuilder builder = session.getCriteriaBuilder(); // used to create our query that uses "where" criteria
         CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
         Root<Account> root = criteria.from(Account.class);
 
         //Predicates are individual criteria for a select statement
         Predicate checkingAccounts = builder.equal(root.get("accountType"), AccountType.CHECKING); //checking accounts only
-        Predicate bobAccountId = builder.equal(root.get("accountHolder"), bob.getId()); //accountHolder is Bob's ID
+        Predicate bobAccountId = builder.equal(root.get("accountHolder"), client.getId()); //accountHolder is Bob's ID
 
         //Add the predicates to the criteria with an AND
         criteria.select(root).where(builder.and(checkingAccounts, bobAccountId));
