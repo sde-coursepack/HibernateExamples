@@ -62,4 +62,14 @@ public class State {
     public void setCapitolCity(String capitolCity) {
         this.capitolCity = capitolCity;
     }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", population=" + population +
+                ", capitolCity='" + capitolCity + '\'' +
+                '}';
+    }
 }

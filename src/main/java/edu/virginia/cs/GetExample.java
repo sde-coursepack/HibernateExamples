@@ -74,9 +74,9 @@ public class GetExample {
     }
 
     private static void deposit100ToAccount(Account account) {
-        System.out.printf("Bob's Checking Total before deposit: %f.2\n", account.getBalance());
+        System.out.printf("Checking Total before deposit: %f\n", account.getBalance());
         account.deposit(100);
-        System.out.printf("Bob's Checking Total after deposit: %f.2\n", account.getBalance());
+        System.out.printf("Checking Total after deposit: %f\n", account.getBalance());
         session.persist(account); //Update's the account balance
         session.getTransaction().commit(); //save the change
     }
