@@ -15,7 +15,6 @@ public class GetExample {
     private static final int BOB_ID_NUMBER = 1; //may need to update this number for your code to work
     private static Session session;
 
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
 
@@ -55,9 +54,8 @@ public class GetExample {
 
     private static List<Client> getAllClientsFromDatabase() {
         String allClients = "FROM Client"; //Note that this uses the CLASS name, not the table name CLIENTS
-        Query<Client> query = session.createQuery(allClients);
-        List<Client> clientList = query.getResultList();
-        return clientList;
+        Query<Client> query = session.createQuery(allClients, Client.class);
+        return query.getResultList();
     }
 
     private static List<Account> getCheckingAccountsForClient(Client client) {
