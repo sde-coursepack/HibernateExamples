@@ -16,14 +16,20 @@ public class StateDemo {
         session.getTransaction().commit();
 
         // Get Example
-//        State maryland = session.get(State.class, 1);
-//        System.out.println(maryland);
-//
+        State maryland = session.get(State.class, 1);
+        System.out.println(maryland);
+
         // Get All States:
         String hql = "from State"; //class name, not Table name!
         Query<State> stateQuery = session.createQuery(hql);
         List<State> stateList = stateQuery.list();
         System.out.printf("Number of States = %d\n", stateList.size());
+
+        // Get the State with the capitol Annapolis
+        hql = "from State S where S.name = 'Annapolis'";
+        Query<State> annapolisQuery = session.createQuery(hql);
+        List<State> annapolisList = stateQuery.list();
+        System.out.printf("State with capitol Annapolis = %s\n", stateList.get(0));
 
         session.close();
     }
