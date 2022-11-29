@@ -10,7 +10,7 @@ public class State {
     @Column (name = "ID")
     private int id;
 
-    @Column(name="STATE_NAME", unique = true, nullable = false)
+    @Column(name="STATE_NAME", unique = true, nullable = false, length = 32)
     private String name;
 
     @Column(name = "POPULATION", nullable = false)

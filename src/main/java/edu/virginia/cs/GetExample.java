@@ -8,13 +8,17 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
 
 public class GetExample {
-    private static final int BOB_ID_NUMBER = 7; //may need to update this number for your code to work
+    private static final int BOB_ID_NUMBER = 1; //may need to update this number for your code to work
     private static Session session;
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
+
         session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
 
@@ -26,20 +30,27 @@ public class GetExample {
 
         System.out.println("=======Printing Client List========");
         clientList.forEach(System.out::println);
+        clientList.forEach(client -> System.out.println(client.getAccounts()));
 
-        //Get only Bob's checking accounts
-        Account bobsChecking = getPrimaryCheckingAccountForClient(bob);
+        System.out.println("=======Printing All of Bob's Transactions========");
+        for (Account account : bob.getAccounts()) {
+            for (Transaction transaction : account.getTransactionList()) {
+                System.out.printf("Transaction by %s on Account #%d - %f\n", bob.getName(), account.getId(), transaction.getAmount());
+            }
+        }
+
+        System.out.println("=======Deposit 100 dollars to Bob's primary checking account========");
+        //Get only Bob's checking accounts using a query
+        List<Account> bobsCheckingAccounts = getCheckingAccountsForClient(bob);
 
         //add 100 dollars
-        deposit100ToAccount(bobsChecking);
+        deposit100ToAccount(bobsCheckingAccounts.get(0));
 
         session.close();
     }
 
     private static Client getClientFromIdNumber(int idNumber) {
-        Client bob = session.get(Client.class, idNumber);
-        System.out.println(bob);
-        return bob;
+        return session.get(Client.class, idNumber);
     }
 
     private static List<Client> getAllClientsFromDatabase() {
@@ -49,7 +60,7 @@ public class GetExample {
         return clientList;
     }
 
-    private static Account getPrimaryCheckingAccountForClient(Client client) {
+    private static List<Account> getCheckingAccountsForClient(Client client) {
         CriteriaBuilder builder = session.getCriteriaBuilder(); // used to create our query that uses "where" criteria
         CriteriaQuery<Account> criteria = builder.createQuery(Account.class);
         Root<Account> root = criteria.from(Account.class);
@@ -65,12 +76,7 @@ public class GetExample {
         Query<Account> this_query = session.createQuery(criteria);
 
         //Get the list of accounts returned by the criteria
-        List<Account> accountList = this_query.getResultList();
-
-        //Print account list
-        System.out.println(accountList);
-
-        return accountList.get(0);//returns first checking account
+        return this_query.getResultList();
     }
 
     private static void deposit100ToAccount(Account account) {

@@ -1,6 +1,8 @@
 package edu.virginia.cs;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ACCOUNTS")
@@ -20,7 +22,12 @@ public class Account {
     @JoinColumn(name="CLIENT_ID", referencedColumnName = "ID")
     private Client accountHolder;
 
-    public Account() { }
+    @OneToMany(mappedBy = "account")
+    private List<Transaction> transactionList;
+
+    public Account() {
+        transactionList = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -54,7 +61,25 @@ public class Account {
         this.accountHolder = accountHolder;
     }
 
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
+
     public void deposit(double amount) {
         setBalance(getBalance() + amount);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", accountType=" + accountType +
+                ", balance=" + balance +
+                ", accountHolder=" + accountHolder.getId() +
+                '}';
     }
 }

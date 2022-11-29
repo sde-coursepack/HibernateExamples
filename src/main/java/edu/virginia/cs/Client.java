@@ -1,6 +1,12 @@
 package edu.virginia.cs;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="CLIENTS")
@@ -19,6 +25,9 @@ public class Client {
     @Column(name="EMAIL", nullable = false)
     private String email;
 
+    @OneToMany(mappedBy = "accountHolder")
+    private List<Account> accounts;
+
     public Client(int id, String name, String address, String email) {
         this.id = id;
         this.name = name;
@@ -26,7 +35,9 @@ public class Client {
         this.email = email;
     }
 
-    public Client() { }
+    public Client() {
+        accounts = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -58,6 +69,14 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
     @Override
